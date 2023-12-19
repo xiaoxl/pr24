@@ -1,0 +1,332 @@
+
+## `list` 
+
+`list` is a basic Python data structure. It is an ordered sequence of object types, and it is denoted by `[]`. A typical list example is `[0, 1, 2]`, which is a 3-element list.
+
+Main questions in `list` contain creating, indexing and applications.
+
+### Creating lists
+
+There are two built-in methods to create lists. 
+
+::: {.callout-note collapse="true"}
+# Naive way 
+A `list` can be created simply by writing down all the elements in order and enclosed by `[]`. Please see the following typical example.
+
+```{python}
+L = [0, 1, 2]
+L
+```
+
+An empty list can be denoted by `[]`. 
+:::
+
+::: {.callout-note collapse="true"}
+# Use `list()` to convert objects into a list
+
+Similar to the type change for numeric types and `str`, you may use `list()` to convert other objects into a list, if able. The typical example is to convert other iterators into lists.
+
+```{python}
+s = 'abc'
+list(s)
+```
+
+```{python}
+r = range(1, 6, 2)
+list(r)
+```
+
+
+```{python}
+list(zip(s, r))
+```
+
+Empty list can be created by `list()`.
+:::
+
+::: {.callout-tip}
+The real difference between this above two methods are very subtle. You may just focus on which one can create the list you want, for now.
+:::
+
+
+
+
+### Indexing
+There are two ways to get access to elements in a list: by position or by slice. 
+
+
+::: {.callout-note collapse="true"}
+## By position
+
+Let `L` be a list. Then `L[i]` will return the `i`-th element in the list. 
+
+- All index in Python starts from `0`. Therefore the first element is `L[0]`, the second is `L[1]`, etc..
+- Negative position means go backwards. So `L[-1]` means the last element, `L[-2]` means the second last element, etc..
+
+
+```{python}
+L = [1, 2, 3]
+L[0]
+```
+
+```{python}
+L[-2]
+```
+
+:::
+
+
+::: {.callout-note collapse="true"}
+## By slicing
+`slice` is a Python object. It looks like `slice(start, stop, step)`. It represents an arithematic sequence, which starts from `start`, ends before `stop` with a step size `step`. The default step size is `1`. For example, `slice(0, 5, 1)` represents an arithematic sequence `0`, `1`, `2`, `3`, `4`. Note that `slice(0, 5, 1)` itself is a slice object, and it is NOT the list `[0, 1, 2, 3, 4]`. 
+
+Let `L` be a list, and `s=slice(start, stop, step)` be a slice. `L[s]` is the portion of the original list `L` given by the index indicated by the slice `s`, as a list. A common way to write slice is through `:`. When slicing a list, you may also use 
+
+```{python}
+#| eval: false
+L[start:stop:step]
+```
+
+1. The slice ends before `stop`. Therefore the right end point `stop` is not in the slice.
+2. If `step` is not specified, `step=1` is the default value.
+3. If `start` or `stop` is not specified, the default value is the first of the list or the last.
+4. `start` and `stop` follows the rules of negative positions. 
+5. When slicing, the result is always a list, even if it only contains one element.
+
+
+```{python}
+L = ['a', 'b', 'c', 'd', 'e']
+L[1:5:2]
+```
+
+```{python}
+L[1:3]
+```
+
+
+```{python}
+L[:-1]
+```
+
+```{python}
+L[-1:0:-1]
+```
+
+
+:::
+
+
+
+### Methods
+
+::: {.callout-note collapse="true"}
+## `in`
+`in` is used to check whether one object is in a list. Please see the following example.
+
+```{python}
+L = ['1', '2', '3']
+'1' in L
+```
+
+```{python}
+1 in L
+```
+:::
+
+
+::: {.callout-note collapse="true"}
+## `.append()`
+`.append()` method is used to add one object to the list. The default setting is to add the object to the end of the list. Please see the following example.
+
+```{python}
+L = [1, 2, 3]
+L.append(4)
+L
+```
+Note that you may input any Python object. If appending another list, that list will be treated as an object. Please see the following example.
+
+```{python}
+L = [1, 2, 3]
+L.append([4, 5])
+L
+```
+
+:::
+
+
+::: {.callout-note collapse="true"}
+## `.extend()` and `+`
+`.extend()` method is used to extend the original list by another list. The input has to be a list. Please see the following example.
+
+```{python}
+L = [1, 2, 3]
+L.extend([4, 5])
+L
+```
+
+```{python}
+#| error: true
+L = [1, 2, 3]
+L.extend(4)
+L
+```
+You may use `+` to represent `.extend()`. Please see the following example. It is exactly the same as `[1, 2, 3].extend(['a', 'b'])`.
+
+```{python}
+[1, 2, 3] + ['a', 'b']
+```
+
+:::
+
+
+::: {.callout-note collapse="true"}
+## `del`, `.remove()` and `.pop()`
+There are multiple ways to remove an element from a list.
+
+- `.remove()` is a `list` method, that is used as `L.remove(a)`. It removes element in-place and is based on values. In other words, it will remove the first element whose value equals to `a`.
+
+```{python}
+L = [2, 3, 1, 3, 1, 2]
+L.remove(1)
+L
+```
+- `.pop()` is also a `list` method. It removes element in-place, is based on position index, and will return the element removed. The default choice is to pop the last element.
+
+```{python}
+L = [1, 2, 3, 4]
+element_popped = L.pop()
+element_popped
+```
+
+```{python}
+L
+```
+
+```{python}
+L = [1, 2, 3, 4]
+element_popped = L.pop(2)
+element_popped
+```
+
+```{python}
+L
+```
+- `del` is a Python command, that is used to delete elements in a `list` based on position index. 
+
+```{python}
+L = [3, 1, 2, 1, 2, 3]
+del L[3]
+L
+```
+
+:::
+
+
+::: {.callout-note collapse=true}
+## `sorted()` and `.sort()`
+Let `L` be a list of numbers. We could use `sorted(L)` or `L.sort()` to sort this list `L`. 
+
+- `sorted()` is a Python built-in function. The syntax is straightforward.
+
+```{python}
+a = [3, 1, 2]
+b = sorted(a)
+b
+```
+
+- `.sort()` is a `list` method. It sorts the list in place.
+```{python}
+a = [3, 1, 2]
+a.sort()
+a
+```
+Note that `a.sort()` doesn't have any return values. `a` is altered during the process. If you want to catch the return value, you will get a `None` object.
+
+```{python}
+b = a.sort()
+b is None
+```
+
+::: {.callout-caution}
+## The importance of documents
+This example shows that similar functions may behaves differently. It is actually very hard to predict what would happen since it all depends on how the developer of the function thinks about the problems.
+
+Therefore it is very important to know how to find references. Other than simply asking questions on StackOverflow or other forums, the official documents are always your good friend. For example, you may find how these two functions work from [`sorted()`](https://docs.python.org/3/library/functions.html#sorted) and [`.sort()`](https://docs.python.org/3/library/stdtypes.html#list.sort).
+:::
+
+:::
+
+
+### Work with `str`
+There are many operations of `str` are related to `list`.
+
+
+::: {.callout-note collapse="true"}
+## Slicing
+We already mentioned that we could use `s[n]` to get the nth letter of a string `s`. Similarly we could use slice to get part of a string. Note that the index shares the same rule as lists.
+
+```{python}
+s = 'abcdef'
+s[1]
+```
+
+```{python}
+s[1:3]
+```
+
+```{python}
+s[1:5:2]
+```
+
+:::
+
+
+::: {.callout-note collapse='true'}
+## `.split()`
+`split` is used to split a string `original_string` by a given substring `sep`. The result is a list of the remaining parts. The syntax is 
+
+```{python}
+#| eval: false
+original_string.split(sep)
+```
+Please see the following example.
+
+```{python}
+s = 'abcabcadedeb'
+s.split('b')
+```
+Note that the last element of the result is an empty string `''` since the last letter of `s` is `b`.
+
+```{python}
+s = 'abcabcadedeb'
+s.split('ca')
+```
+
+
+::: {.callout-tip}
+This `.split()` is a very simple way to recognize patterns in a string. To fully explore this topic, the best practice is to use regular expressions.
+:::
+:::
+
+
+
+::: {.callout-note collapse='true'}
+## `.join()`
+Let `L` be a list of strings. We could connect them together to form a single string, by using `.join()`. We could put a separator string `sep` between each part in the list `L`. The result is the connected string. The syntax is 
+
+```{python}
+#| eval: false
+sep.join(L)
+```
+Please see the following example.
+
+```{python}
+L = ['a', 'b', 'c', 'd']
+'+'.join(L)
+```
+
+```{python}
+''.join(L)
+```
+Note that in this example the separtor string is an empty string.
+:::

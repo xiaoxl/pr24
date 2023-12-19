@@ -1,0 +1,158 @@
+
+## numeric and `str` {#sec-path}
+
+This section is based on @You2020.
+
+There are several built-in data structures in Python. Here is an (incomplete) list:
+
+- `None`
+- Boolean -- `True`, `False`
+- Numeric Types — `int`, `float`, `complex`
+- Text Sequence Type — `str`
+- Sequence Types — `list`, `tuple`
+- Map type - `dict`
+
+We will cover numeric types and strings in this section. The rests are either simple that are self-explained, or not simple that will be discussed later.
+
+
+
+### Numeric types and math expressions
+Numeric types are represented by numbers. If there are no confusions, Python will automatically detect the type. 
+```{python}
+x = 1 # x is an int.
+y = 2.0 # y is a float.
+```
+There are several types of numeric types, like `int`, `float`, etc.. Usually Python will automatically determine the type of the data, but sometimes you may still want to declare them manually. To change types you may apply `int()`, `float()`, etc. to the values you want to change.
+
+Python can do math just like other programming languages. The basic math operations are listed as follows.
+
+- `+`, `-`, `*`, `/`, `>`, `<`, `>=`, `<=` works as normal.
+- `**` is the power operation.
+- `%` is the mod operation.
+- `!=` is `not equal`
+
+
+
+::: {.callout-caution collapse="true"}
+## `==` and `is`
+
+Python is centered around objects. There are differences between two objects and the values of two objects. 
+
+- `==` is testing whehter these two objects have the same value.
+- `is` is testing whether these two objects are exactly the same.
+
+You may use `id(x)` to check the id of the object `x`. Two objects are identical if they have the same id. Please see the following example.
+
+`a` and `b` are two lists. They are different objects, but their contents are the same.
+
+```{python}
+a = [1, 2]
+b = [1, 2]
+a == b
+```
+
+```{python}
+a is b
+```
+
+You may check their ids and find that their ids are different.
+```{python}
+id(a) == id(b)
+```
+
+
+
+
+For beginners, in most cases, you should use `==` to check values of variables. The most common case to use `is` is to check whether something is a `None` object. In other words, you should use `a is None` other than `a == None`.
+
+More details about objects will be discussed later in this course.
+:::
+
+
+
+### `str`
+Scalars are represented by numbers and strings are represented by quotes. Examples:
+
+```{python}
+x = 1       # x is a scalar.
+y = 's'     # y is a string with one letter.
+z = '0'     # z loos like a number, but it is a string.
+w = "Hello" # w is a string with double quotes.
+```
+
+Here are some facts.
+
+1. For strings, you can use either single quotes `'` or double quotes `"`. The tricky part here is that you may use `'` in `"`, or `"` in `'`. If you want to use `'` in `'` or `"` in `"`, use `\` below.
+2. `\` is used to denote escaped words. You may find the list [here](https://docs.python.org/3/reference/lexical_analysis.html#string-and-bytes-literals). 
+3. You can use `str()` to change other values to a string, if able.
+4. You may use `string[n]` to read the nth letter of `string`. Note that the index starts from `0`. This part is very similar to list. We will come back to it later after we talked about list.
+
+```{python}
+s = 'abcdef'
+s[3]
+```
+
+5. To concatenate two strings, you may simply use `+`. See the following example.
+
+```{python}
+s = 'abc' + 'def'
+s
+```
+6. We can also multiply a string with a positive integer. What it does is to repeat the string multiple times. See the following example.
+
+```{python}
+s = 'abc'*5
+s
+```
+
+
+::: {.callout-note collapse="true"}
+## `.format()` method
+The built-in string class provides the ability to do complex variable substitutions and value formatting via the `.format()` method. The basic syntax is to use the inputed augments to fill in the blanks in the formatted string specified by `{}`. Please see the following examples.
+
+```{python}
+'I have {} {} and {} {}.'.format(1, 'apple', 2, 'bananas')
+```
+
+More detailed usage is refered to the official documents [here](https://docs.python.org/3/library/string.html#custom-string-formatting). 
+
+:::
+
+
+Although `str` is a built-in type, there are tons of tricks with `str`, and there are tons of packages related to strings. Generally speaking, to play with strings, we are interested in two types of tasks.
+
+- Put information together to form a string.
+- Extract information from a string.
+
+A lot of tricks of strings are related to lists. We will talk about these two tasks later. The following example is just a showcase.
+
+
+<!-- ::: {.callout-note}
+There is a very subtle relations between the variable / constant and the name of the variable / constant. We will talk about these later.
+::: -->
+
+
+::: {#exm-}
+Here is an example of playing with strings. Please play with these codes and try to understand what they do.
+
+```{python}
+import re
+
+def clean_strings(strings):
+    result = []
+    for value in strings:
+        value = value.strip()
+        value = re.sub('[!#?]', '', value)
+        value = value.title()
+        result.append(value)
+    return result
+
+states = [' Alabama ', 'Georgia!', 'Georgia', 'georgia', 'FlOrIda',
+          'south carolina##', 'West virginia?']
+clean_strings(states)
+```
+
+:::
+
+
+

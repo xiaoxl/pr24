@@ -1,0 +1,599 @@
+
+
+
+
+
+## Basic `pandas`
+
+###  `Series` and `DataFrame`
+A *Series* is a 1-d array-like object which has index. The default index is starting from `0`. You may change the index to be something assigned by you. Thus it can be treated as a generalization of a `dict`.
+
+```{python}
+#| echo: false
+import pandas as pd
+```
+```{python}
+obj = pd.Series([3, 1, 2, 4])
+obj
+```
+```{python}
+obj2 = pd.Series([3, 1, 2, 4], index=['a', 'b', 'c', 'd'])
+obj2
+```
+```{python}
+data3 = {'a': 3, 'b': 1, 'c': 2, 'd': 4}
+obj3 = pd.Series(data3)
+obj3
+```
+
+A *DataFrame* represents a rectangular table of data and contains an ordered collection of columns, each of which can be a different value type. The DataFrame has both a row and column index; it can be thought of as a dict of Series all sharing the same index. When displaying a DataFrame, we may use `.head()` to just display the first few rows for efficicy. 
+
+```{python}
+import pandas as pd
+
+data = {'a': [1, 2, 3, 4, 5, 6, 7],
+        'b': [1.1, 2.1, 3.1, 4.1, 5.1, 6.1, 7.1],
+        'c': ['a', 'b', 'c', 'd', 'e', 'f', 'g']}
+df = pd.DataFrame(data)
+df.head()
+```
+
+
+
+### Decorations
+A `Series` or a `DataFrame` might have named row indexes and column names. I collect some tools for you to play with them and list them below.
+
+
+::: {.callout-note collapse="true"}
+# Setting when creating
+We may use the setting `columns=` or `index=` to change the column names and the index names. See the following example.
+
+```{python}
+import numpy as np
+import pandas as pd
+data = pd.DataFrame(np.arange(16).reshape((4, 4)),
+                    index=['Ohio', 'Colorado', 'Utah', 'New York'],
+                    columns=['one', 'two', 'three', 'four'])
+data
+```
+
+:::
+
+
+::: {.callout-note collapse="true"}
+# `.rename()`
+We may use the `.rename()` method. Note that by default the return value of this method is a copy and it won't affect the original `DataFrame`. The arguments can be in many different formats. Please see [the official document](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.rename.html) for more details.
+
+If you want to directly make the change, please use the argument `inplace=True`.
+
+The following example shows the standard way to rename.
+
+```{python}
+df = pd.DataFrame(np.arange(16).reshape((4, 4)))
+df.rename(columns={0: 'zero'}, index={2: 'two'})
+```
+However the orginal `df` is not affected.
+
+```{python}
+df
+```
+If you would like to change the original `df`, you may either set `df = df.rename(columns={0: 'zero'}, index={2: 'two'})`, or 
+
+```{python}
+df.rename(columns={0: 'zero'}, index={2: 'two'}, inplace=True)
+df
+```
+
+:::
+
+::: {.callout-note collapse="true"}
+# Set a column to be the index by `.set_index()`
+
+The title is all. A few remarks:
+
+1. You may set multiple columns to be the index. In this case, what you get is a multi-index system (which is also called Hierarchical indexing). We will talk about this later in @sec-hierindexing.
+2. The argument `drop` is used to control whether the column is deleted after you set it to be the index. The default setting is `True`.
+3. The argument `append` is used to control whether the column you choose is appended to the exsiting index to form a multi-index system. The default is `False`.
+4. The argument `inplace` is used to control whether you want to make the change inplace. The default is `False`.
+
+:::
+
+::: {.callout-note collapse="true"}
+# Reset the index by `.reset_index()`
+
+The title is all. A few remarks:
+
+1. The new index is integers starting from `0`.
+2. `drop` is an argument to control whether the original index is dropped or added back to the `DataFrame` as a column. The default is `False`, which means that by default the original index will be added back to the `DataFrame`. 
+:::
+
+### Look at the `DataFrame`
+The following methods can be used to look at the `DataFrame`. Their syntax is very simple. Please try them by yourselves.
+
+- `.head()`: show the first few rows.
+- `.tail()`: show the last few rows.
+- `.describe()`: show the basic statistics of each columns.
+
+These are methods for `Series` which might be helpful to understand the data. 
+
+- `.unique()`
+- `.value_counts()`
+
+
+::: {.callout-note collapse="true"}
+# An example
+
+
+```{python}
+import pandas as pd
+
+df = pd.DataFrame({'a': [1, 2, 3, 1, 2, 2, 1, 1, 1],
+                   'b': [3, 1, 1, 2, 4, 5, 2, 1, 3]})
+df.head(3)
+```
+
+```{python}
+df.tail()
+```
+
+```{python}
+df.describe()
+```
+
+```{python}
+df['a'].unique()
+```
+
+```{python}
+df['b'].value_counts()
+```
+
+:::
+
+
+
+
+
+
+
+
+## Indexing
+The act of selecting rows or columns to access from a dataframe or series is called *indexing*. There are many different ways to index in `pandas`. We will only cover the most popular ones.
+
+
+::: {.callout-caution collapse="true"}
+There is the same copy and view issue with `pandas` as in `numpy`. However it is more complicated and more inconsistent. Please check the official documents for more details and do more experiments before implementing the codes. Usually if your code is ambiguous, you might see the infamous `SettingWithCopyWarning` warning.
+
+
+
+
+```{python}
+#| warning: true
+df = pd.DataFrame({'a': [1, 2, 3], 'b': [4, 5, 6]})
+df[df['a']==3]['b'] = 3
+```
+
+
+Note that `pandas` is testing a `copy-on-write` feature to fix the issue. The feature can be simlified as "any `DataFrame` or `Series` derived from another in any way always behaves as a copy". Please keep an eye on the updates about when the feature will be fully implemented in `pandas`.
+:::
+
+
+### `[]`
+
+::: {.callout-note collapse=true}
+## `Series[]`
+
+```{python}
+#| echo: false
+
+from IPython.display import Markdown
+import pandas as pd
+from tabulate import tabulate
+table = [['`Series[label]`', 'scalar value'],
+         ['`Series[list of labels]`', '`Series` corresponding to labels'],
+         ['`Series[slice]`', '`Series` corresponding to the slice'],
+         ['`Series[boolean vector]`', '`Series` corresponding to the boolean vector']]
+        #  ['DataFrame', '`dateframe[colname]`', '`Series` corresponding to colname'],
+        #  ['DataFrame', '`dataframe[list of colnames]`', '`DataFrame` corresponding to colnames']]
+# table = {"Object Type": ['Series', 'DataFrame'],
+        #  "Selection": ['`series[label]`', '`dateframe[colname]`'],
+        #  "Return Value Type": ['scalar value', '`Series` corresponding to colname']}
+# Markdown(pd.DataFrame(table))
+# df = pd.DataFrame(table)
+Markdown(tabulate(table, headers=["Input value type",
+                                  "Return Value Type" ]))
+```
+
+1. For `Series`, values are accessed by labels, not positions. Since `Series` are usually considered as a column, you may think these labels as row indexes. 
+
+2. When using slice, things becomes more complicated. There are two ways of using slice. You may either slice by positions, or slice by labels. The main differences between them is that:
+
+- slice by positions `Series[i:j]` doesn't contain the last index `Series[j]`;
+- slice by labels `Sereies[I:J]` contains the last label `Series[J]`.
+
+3. Sometimes the labels of a series are integers, but different than the position indexes. In `pandas 1.5.1`, slice by positions takes priority. However the whole scenario is very confusing, and this will be changed in future versions. In this cases it is recommanded to use `.loc` and `.iloc`.  
+
+4. When indexing using boolean vector, the vector should be of the same length as the `Series`. In other words, it works as the boolean bector shows which row is selected.
+
+See some examples below.
+
+
+::: {#exm-}
+
+```{python}
+import pandas as pd
+
+example = pd.Series({'a': 1.1, 'b': 2.2, 'c': 3.3, 'd': 4.4})
+example
+```
+
+```{python}
+example['b']
+```
+
+```{python}
+example[['b', 'a']]
+```
+
+```{python}
+example[0:2]
+```
+
+```{python}
+example['a':'c']
+```
+
+
+```{python}
+example[[True, False, True, False]]
+```
+
+
+:::
+
+:::
+
+
+::: {.callout-note collapse=true}
+## `DataFrame[]`
+```{python}
+#| echo: false
+
+from IPython.display import Markdown
+import pandas as pd
+from tabulate import tabulate
+table = [[ '`DataFrame[colname]`', 'The column corresponding to colname as a `Series`'],
+         ['`DataFrame[list-of-colnames]`', 'The columns of `DataFrame` corresponding to colnames'],
+         ['`DataFrame[slice]`', 'The rows of `DataFrame` corresponding to the slice' ],
+         ['`DataFrame[boolean list]`', '`DataFrame` corresponding to the boolean list']]
+# table = {"Object Type": ['Series', 'DataFrame'],
+        #  "Selection": ['`series[label]`', '`dateframe[colname]`'],
+        #  "Return Value Type": ['scalar value', '`Series` corresponding to colname']}
+# Markdown(pd.DataFrame(table))
+# df = pd.DataFrame(table)
+Markdown(tabulate(table, headers=["Input value type",
+                                  "Return Value Type" ]))
+```
+
+1. Slice for `DataFrame` behaves exactly like slice for `Series`, that it is selecting rows, and it works for both labels and positions. Similarly, slicing by positions are not recommended and might be deprecated in the future. 
+2. On the other hand side, selecting rows are usually related to querying. Therefore it is better not to focus on slicing.
+3. Inside `[]`, one column name and a list of columna names will result totally different objects: one is a `Series` and the other is a `DataFrame`. 
+4. In prior versions, using `[list-of-colnames]` would work as long as *at least* 1 of the keys was found (otherwise it would raise a `KeyError`). This behavior was changed and will now raise a `KeyError` if at least one label is missing. The recommended alternative is to use `.reindex()`.
+5. When indexing using boolean vector, the vector should be of the same length as the number of rows of the `DataFrame`. In other words, it works as the boolean bector shows which row is selected.
+6. Using `[]` for `DataFrame` cannot give you a single value, since what are inside `[]` is always treated as a row index or a column index. If you want to get access to the value of a single cell by both row index and column index, use other method like `.loc[]`.
+7. If the column name is eligible for attributes, you may also use `df.a` to represent `df['a']` for simplicity.
+
+::: {#exm-}
+
+```{python}
+import pandas as pd
+
+example = pd.DataFrame({'a': [1.1, 2.2], 'b': [2.2, 3.3], 'c': [3.3, 4.4]})
+example
+```
+
+```{python}
+example['a']
+```
+
+```{python}
+example.a
+```
+
+```{python}
+example[['a']]
+```
+
+
+```{python}
+example[0:1]
+```
+
+
+```{python}
+example[[False, True]]
+```
+
+
+
+
+
+:::
+
+:::
+
+
+
+
+
+### `.loc[]` and `.iloc[]`
+
+`[]` contains several different types of ways to access data. `.loc[]` and `.iloc[]` are more specific. 
+
+- `.loc[]` is to use labels to access data.
+- `.iloc[]` is to use positions to access data.
+
+
+:::{.callout-note collapse=true}
+## Notes for `.loc[]` and `.iloc[]`
+
+1. When there is only one index is specified, it is refered to rows. 
+2. When using both indexes, the first is row index and the second is column index.
+3. When selecting all rows/columns, you may put `:` in the corresponding place.
+4. `df.loc[1, 'a']` refers to the cell in the DataFrame `df` whose row index is `1` and column index is `a`. `df[1, 'a']` refers to the column in the DataFrame `df` whose column name is `(1, 'a')`.
+5. Many other small details are very similar to `[]`. For example, pay attention to the differences between `df.loc[:, 'a']` and `df.loc[:, ['a']]`.
+
+
+::: {#exm-}
+
+
+```{python}
+import pandas as pd
+example = pd.DataFrame({'a': [1.1, 2.2], 'b': [2.2, 3.3], 'c': [3.3, 4.4]})
+example
+```
+
+
+```{python}
+example.loc[1]
+```
+
+
+```{python}
+example.loc[:, 'a']
+```
+
+```{python}
+example.loc[1, 'a']
+```
+
+```{python}
+example.iloc[0:1, 0:2]
+```
+
+
+```{python}
+example.iloc[1, 0:2]
+```
+
+```{python}
+example.iloc[[1], 0:2]
+```
+:::
+:::
+
+
+
+
+### Boolean indexing
+Let `df` be a `DataFrame`. Assume that `boo` is boolean vector of the dimension same to the number of rows of `df`, then we can use `df[boo]` to filter data: all rows with `True` will be selected. The syntax is similar to the boolean indexing in `numpy`.
+
+
+::: {.callout-note collapse="true"}
+# The basic usage of boolean indexing
+
+```{python}
+import pandas as pd
+import numpy as np
+df = pd.DataFrame(np.random.randn(8, 4),
+                  index=pd.date_range('1/1/2023', periods=8),
+                  columns=['A', 'B', 'C', 'D'])
+df
+```
+
+```{python}
+df[df['A']>0]
+```
+
+To get the boolean vector, we may directly compute logic expression using columns of `df`. The previous example is of this kind.
+
+You may write complicated expressions. The operators are:
+
+- `|` for or
+- `&` for and
+- `~` for not
+
+Note that parentheses **must** be used to ensure a correct result. Please see the following example.
+
+```{python}
+df[(df['A'] > 1) & (df['B'] < 3)]
+```
+
+:::
+
+<!-- One method that is usually use is `.isin()` method. This is used to check whether the entry of the `Series` belongs to a `list`. -->
+
+There are many methods and functions that can create boolean vectors. We will introduce them when we need them.
+
+
+
+### `.query()`
+`DataFrame` has a `.query()` method that allows filtering using an expression instead of a boolean vector. This method uses a different approach from the point of programming language. From the point of users, you are free to choose between `.query()` and boolean indexing to filter data.
+
+
+::: {.callout-note collapse="true"}
+# Here are examples of `.query()`.
+```{python}
+df = pd.DataFrame({'A': [1,2,3], 'B': [3,2,1], 'C': [5,4,3]})
+df
+```
+
+
+```{python}
+df.query('A<B and B<C')
+```
+
+It can be simplified as follows:
+
+```{python}
+df.query('A<B<C')
+```
+
+This is the same as the following code.
+
+```{python}
+df[(df['A']<df['B']) & (df['B']<df['C'])]
+```
+
+Note that `.query()` does not require the usage of parentheses. It also use English like `or`/`and`/`not` for `|`/`&`/`~`.
+
+
+
+```{python}
+df.query('A in C')
+```
+
+
+```{python}
+df.query('A not in C')
+```
+
+
+```{python}
+df.query('A not in C and A<B')
+```
+
+
+```{python}
+df.query('[1,2] in B')
+```
+:::
+
+
+### Reindex
+
+`.reindex()` is a data alignment method in `pandas`. To reindex means to conform the data to match a given set of labels along a particular axis. This accomplishes several things:
+
+- Reordering the existing data to match a new set of labels
+- Inserting missing value (`NaN`) markers in label locations where no data for that label existed
+
+Here is a simple example:
+
+
+```{python}
+import pandas as pd
+data = pd.DataFrame(np.arange(16).reshape((4, 4)),
+                    index=['Ohio', 'Colorado', 'Utah', 'New York'],
+                    columns=['one', 'two', 'three', 'four'])
+data
+```
+
+```{python}
+data.reindex(index = ['Colorado', 'Arkansas', 'New York'],
+             columns = ['three', 'five', 'one'])
+```
+
+From the first glance, `.reindex()` behave the same as other indexing methods. Here are a few differences:
+
+- The purpose of indexing methods is to select/filter data, while the purpose of reindex is to make the data in a very specific form.
+- When dealing with non-existent indexes/columns, most other indexing methods will return error or warning, while `.reindex()` can handle it automatically.
+- The default setting of `.reindex()` is to return a copy. This setting can be changed by the argument `copy=False`. 
+
+For more details please see the [official guide](https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#reindexing). 
+
+
+
+
+
+
+
+
+<!-- 
+
+- Series indexing `(obj[...])` works analogously to NumPy array indexing, except you
+can use the Series’s index values instead of only integers. 
+
+
+
+
+
+- We can use logical expresssion to filter DataFrame.
+
+
+```{python}
+import pandas as pd
+
+data = pd.DataFrame(np.arange(16).reshape((4, 4)),
+                    index=['Ohio', 'Colorado', 'Utah', 'New York'],
+                    columns=['one', 'two', 'three', 'four'])
+data[data['one']>5]
+```
+
+
+- `.loc`, `.iloc`
+
+```{python}
+import pandas as pd
+data = pd.DataFrame(np.arange(16).reshape((4, 4)),
+                    index=['Ohio', 'Colorado', 'Utah', 'New York'],
+                    columns=['one', 'two', 'three', 'four'])
+print(data.loc['Colorado', ['two', 'three']])
+print(data.iloc[2, [3, 0, 1]])
+```
+
+- Slicing with labels behaves differently than normal Python slicing in that the endpoint is inclusive. 
+
+```{python}
+import pandas as pd
+
+obj = pd.Series(np.arange(4.), index=['a', 'b', 'c', 'd'])
+obj['b':'c']
+```
+
+
+- Reindex `.reindex()`:
+
+
+::: {.callout-note}
+:::
+ -->
+
+
+
+
+
+### Updating data
+- Assign values to a column of a DataFrame will update that column. If the column doesn't exist, new column will be created. This is called *enlargement*. 
+- When assign values with non-existent row index, that part of the data will be discarded. 
+- When using `.loc`, a `DataFrame` can be enlarged on either axis.
+- Any time if there are no values with a specific column and row, it will show as `NaN`. 
+<!-- - When locating data using indexes, duplicate labels will return all results. -->
+
+::: {#exm-}
+
+```{python}
+import pandas as pd
+
+data = {'a': [1, 2, 3, 4],
+        'b': [1.1, 2.1, 3.1, 4.1],
+        'c': ['a', 'b', 'c', 'd']}
+df = pd.DataFrame(data)
+
+newcol = {1: 'good', 3: 'better', 5: 'best'}
+df['d'] = pd.Series(newcol)
+df
+```
+
+:::
+
+

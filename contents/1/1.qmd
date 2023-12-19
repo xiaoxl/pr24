@@ -1,0 +1,74 @@
+
+## Hello world!
+
+
+<!-- 
+We will mainly focus on this code editor mode at the beginning and check our results or do some simple computations in the console.
+
+Notebook is another very popular mode to use Python. We will talk about it later.
+
+ -->
+
+
+### Setup the Python environment
+
+In this section we are going to setup the Python developing environment.
+
+#### VS Code + Anaconda
+Click [Appendix -@sec-vscode] to see the detailed steps for VS Code and conda. You may also check out [the official document](https://code.visualstudio.com/docs/languages/python). It contains more features but less details.
+
+We will talk about the relation between Python and Anaconda and more about packages sometime later.
+
+#### Google Colab
+Click [Appendix -@sec-googlecolab] for more details.
+
+
+### `Hello World!`
+
+
+<!-- 5. Here are the steps to edit the system environment variables. First in the start menu search for `Edit the system environment variables`. 
+
+![](assests/img/20220817235031.png){fig-align="center"}
+
+Then click the `Environment Variables...` button at the right lower corner. 
+
+![](assests/img/20220817235002.png){fig-align="center"} 
+
+Find the `Path` variable in either the upper window or the lower window. Use which one depends on whether you want to register the variable for the user or for the machine. In this example I add for the user.
+
+Finally double click the variable and add the following path to it. You need to make changes according to your installation. I recommend you to locate your Anaconda installation first to get the path.
+
+![](assests/img/20220817233748.png){fig-align="center"} -->
+
+Take VS Code as an example. In the editor window, type in the code, and run the file in the interactive window.
+
+```{python}
+#| eval: false
+print('Hello World!')
+```
+
+![](assests/img/20220817235844.png){fig-align="center"}  
+
+If you see a small green check mark in the interactive window and also the output `Hello World!`, you are good to go!
+
+### Python code cells and Notebooks
+In VS Code you can run codes cell by cell. Each cell is separated by the symbol `# %%`. Each cell may contain multiple lines. You may click the small button on top of the cell or use keybindings.
+
+![](assests/img/20220818000531.png){fig-align="center"}  
+
+This feature actually mimic the notebook. We may start a real Python Notebook file by directly creating a file with extension `.ipynb`. 
+
+![](assests/img/20220818000752.png){fig-align="center"}
+
+The layout is straightforward. 
+
+
+
+
+
+### Linters
+A *linter* is a tool to help you improve your code by analyzing your source code looking for problems. Some popular choices for Python includes `Flake8` and `Pylint`. It is highly recommended to use one that is compatible with your IDE which can help you to increase the quality of your codes from the begining.
+
+To install `Flake8` please go to [its homepage](https://flake8.pycqa.org/en/latest/). It works well with VS Code.
+
+

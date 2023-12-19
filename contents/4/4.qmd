@@ -1,0 +1,273 @@
+
+## Data Aggregation and Group Operations
+
+### split-apply-combine model
+
+We would like to apply group operations based on the split-apply-combine model. 
+
+- In the first stage of the process, data contained in a pandas object is *split* into groups based on one or more keys that you provide. We then use `.groupby(keys)` to perform the split step. The result is a grouped `groupby` object.
+- Once this is done, a function is *applied* to each group, producing a new value. 
+- Finally the results of all those function applications are combined into a result object. We may apply groupby functions directly as methods to groupby objects.The result is the combined result object.
+
+
+::: {.callout-note collapse="true"}
+# An example
+
+```{python}
+import pandas as pd
+import numpy as np
+
+df = pd.DataFrame({'key1' : ['a', 'a', 'b', 'b', 'a'],
+                   'key2' : ['one', 'two', 'one', 'two', 'one'],
+                   'data1' : np.random.randn(5),
+                   'data2' : np.random.randn(5)})
+df
+```
+Now we want to group `data1` in `df` by `key1`.
+
+```{python}
+grouped = df['data1'].groupby(df['key1'])
+grouped
+```
+What we get is a groupby object and we could apply group functions to it.
+
+The method to look at each group is `.get_group()`.
+```{python}
+grouped.get_group('a')
+```
+
+We may directly apply some group functions to the groupby object.
+```{python}
+grouped.mean()
+```
+```{python}
+grouped.size()
+```
+
+We could iterate over groups.
+
+```{python}
+for name, group in grouped:
+    print('name', name)
+    print('group', group)
+```
+
+We could convert the group object into list and dictionary.
+
+```{python}
+list(grouped)
+```
+```{python}
+dict(list(grouped))
+```
+
+:::
+
+### Built-in aggregation functions
+
+The following functions directly work with groupby objects. You may try them by yourselves.
+
+- `.describe()`
+- `.count()`
+- `.sum()`
+- `.mean()`
+- `.median`
+- `.std()`, `.var()`
+- `.min()`, `.max()`
+- `.prod()`
+- `.first()`, `.last()`
+<!-- - `.agg()` -->
+
+
+
+### Function Application and Mapping
+We may apply functions to each row/column of a `DataFrame`. If the function is a built-in function that is compatible with `DataFrame`, you can directly call the function that it will be applied automatically to each row/column. If it is not, we can call `apply` to get the desired result. 
+
+
+::: {.callout-note collapse="true"}
+# `map`
+To understand the behaviour of `map`, you may treat it as a loop, through a `Series`. `pandas` goes through each item in the `Series` and perform operations as instructed. If there is a returned value, it will be recorded along the `Sereis`.
+
+
+```{python}
+import pandas as pd
+
+ind = pd.Series(['Ohio', 'Colorado', 'New York'])
+ind
+```
+
+```{python}
+ind.map(lambda x: x[:4].upper())
+```
+In the example we go through each item in `ind`. Each item is a string. We pick the first 4 characters, and change them to be upper case.
+
+Note that this operation can also be done by string method. These are two different methods but the results are the same.
+
+```{python}
+ind.str[:4].str.upper()
+```
+
+:::
+
+
+::: {.callout-note collapse="true"}
+# `apply`
+`apply` is very similar to `map`, but for `DataFrame`. The default setting is to go through each column of a `DataFrame`, and the input is the column. You may use the argument `axis=1` to change it to go through each row. Please see the following example. 
+
+::: {#exm-}
+
+```{python}
+import pandas as pd
+data = pd.DataFrame(np.random.rand(4, 4),
+                    index=['Ohio', 'Colorado', 'Utah', 'New York'],
+                    columns=['one', 'two', 'three', 'four'])
+data
+```
+
+```{python}
+f = lambda x: x.max() - x.min()
+
+data.apply(f)
+```
+
+Change `axis` to find the range for each row.
+
+```{python}
+data.apply(f, axis=1)
+```
+
+:::
+
+
+We can use more complicated function to get more complicated result.
+
+::: {#exm-}
+
+```{python}
+data = pd.DataFrame(np.random.rand(4, 4),
+                    index=['Ohio', 'Colorado', 'Utah', 'New York'],
+                    columns=['one', 'two', 'three', 'four'])
+
+f = lambda x: pd.Series([x.max(), x.min()], index=['max', 'min'])
+
+data.apply(f)
+```
+
+:::
+
+
+:::
+
+
+
+
+
+### Some examples
+
+
+::: {#exm-}
+Consider the following DataFrame.
+
+```{python}
+import pandas as pd
+import numpy as np
+df = pd.DataFrame({'location': ['East', 'East', 'East', 'East',
+                                'West', 'West', 'West', 'West'],
+                   'data': np.random.randn(8)},
+                   index=['Ohio', 'New York', 'Vermont', 'Florida',
+                          'Oregon', 'Nevada', 'California', 'Idaho'])
+df.loc[['Vermont', 'Nevada', 'Idaho'], 'data'] = np.nan
+df
+```
+
+We would like to fill in NA values with the mean from each `location` group.
+
+::: {.callout-tip collapse="true"}
+# Tips
+
+```{python}
+#| warning: false
+df.groupby('location', group_keys=False).apply(lambda x: x.fillna(x.mean()))
+```
+The argument `group_keys=False` refers to the setting whether you want to `group_keys` to be presented. If it is `True`, the result looks like this.
+
+```{python}
+#| warning: false
+df.groupby('location', group_keys=True).apply(lambda x: x.fillna(x.mean()))
+```
+
+:::
+
+
+We could also fill in NA values with predefined values, similar to the non-groupby case.
+
+::: {.callout-tip collapse="true"}
+# Tips
+```{python}
+#| warning: false
+predefined = {'East': 0.1, 'West': -0.5}
+df.groupby('location', group_keys=True).apply(lambda x: x.fillna(predefined[x.name]))
+```
+
+:::
+
+
+:::
+
+
+
+
+::: {.callout-tip}
+# Chaining commands
+You may chain commands to a `DataFrame`, just like the examples shown above. If the commands are too long:
+
+- a `()` has to be used to indicate that this is a multiline command, and
+- the line is broken before the `.` sybmol.
+
+Please see the following example.
+
+```{python}
+(df.groupby('location', group_keys=False)
+    .apply(lambda x: x.fillna(predefined[x.name]))
+    .reset_index()
+    .groupby('location')
+    .max()
+)
+```
+
+:::
+
+
+
+
+<!-- ### Sorting and Ranking
+
+- `.sort_values(by=)`
+- `.rank(ascending=, method=)` -->
+
+
+
+
+<!-- ### Summarizing and Computing Descriptive Statistics
+
+- `sum`, `cumsum`
+- `mean`, `median`
+- `.describe()`
+- `.cov`, `.corr` -->
+
+
+
+
+<!-- ### Reading and Writing Data in Text Format
+- `read_csv`
+- `read_excel`
+- `df.to_csv` -->
+
+
+<!-- ### Copies and views
+
+- `inplace` -->
+
+
+
+
