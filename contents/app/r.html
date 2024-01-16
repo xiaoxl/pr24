@@ -329,16 +329,24 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="rstudio" class="level2" data-number="E.1">
 <h2 data-number="E.1" class="anchored" data-anchor-id="rstudio"><span class="header-section-number">E.1</span> RStudio</h2>
-<p>For R, the almost definite choice of IDE is RStudio. You may download and install it from <a href="https://posit.co/downloads/">the homepage</a>. The installation and beginning usage is straightforward. RStudio is using the default R console.</p>
+<p>For R, the almost definite choice of IDE is RStudio. You may download and install it from <a href="https://posit.co/downloads/">the homepage</a>. The installation and beginning usage is straightforward. RStudio is using the default R console. Note that you may need to install <code>tidyverse</code> packages for the purpose of data science. That is, in the R console, first run</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"tidyverse"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>to intall the packages, and then run</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>to load it.</p>
 <p>Although the best R IDE is RStudio, there are still some people willing to try other options. In the rest part of this section I will briefly describe how to set up R environment using other IDES/platforms.</p>
 </section>
 <section id="radian" class="level2" data-number="E.2">
 <h2 data-number="E.2" class="anchored" data-anchor-id="radian"><span class="header-section-number">E.2</span> <code>radian</code></h2>
 <p><code>radian</code> is an alternative console for the R program with multiline editing and rich syntax highlight. One would consider <code>radian</code> as a <code>IPython</code> clone for R, though its design is more aligned to <a href="https://julialang.org/">Julia</a>.</p>
 <p><code>radian</code> is a R console. So to install it you should have an installation of R (version 3.4.0 or above). <code>radian</code> is mainly written in Python. Therefore to install it you should have an installation of Python (version 3.6 or above). Then you may use the following command to install <code>radian</code>.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> install <span class="at">-c</span> conda-forge radian</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> install <span class="at">-c</span> conda-forge radian</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>or</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install <span class="at">-U</span> radian</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install <span class="at">-U</span> radian</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <section id="use-the-console" class="level3" data-number="E.2.1">
 <h3 data-number="E.2.1" class="anchored" data-anchor-id="use-the-console"><span class="header-section-number">E.2.1</span> Use the console</h3>
 <p>First find the path to the console. If you use <code>conda</code> to install <code>radian</code>, the path is <code>&lt;anaconda path&gt;/Scripts/radian.exe</code>. When you directly run the executable file <code>radian.exe</code>, the console will be activated. You may start to run R code.</p>
@@ -355,14 +363,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Install <code>languageserver</code> in R.</li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"languageserver"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"languageserver"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ol start="3" type="1">
 <li><code>radian</code>. This is an alternative R console introduced above. Note that to use <code>radian</code> in VS Code you need to set the <code>rterm</code> variable in VS Code setting to be the path of your <code>radian</code> installation.</li>
 <li><code>httpgd</code>. This is a R package which is for better plotting in VS Code.</li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"httpgd"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"httpgd"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Running R code is simply sending code to the R terminal. Before running R code, you could create an R terminal via command <code>R: Create R terminal</code> in the Command Palette. If you set <code>radian</code> path, this R terminal will be <code>radian</code>.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
@@ -378,30 +386,30 @@ Tip
 <div id="callout-1" class="callout-1-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>You may adding the following Keyboard Shortcuts to VS Code. These are the same setting used in RStudio which are commonly used. The first two are using <code>alt+-</code> to produce <code>&lt;-</code> and the latter two are using <code>ctrl+shift+m</code> to produce <code>%&gt;%</code>.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="dt">"key"</span><span class="fu">:</span> <span class="st">"alt+-"</span><span class="fu">,</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="dt">"command"</span><span class="fu">:</span> <span class="st">"type"</span><span class="fu">,</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="dt">"when"</span><span class="fu">:</span> <span class="st">"editorTextFocus &amp;&amp; editorLangId =~ /r|rmd|qmd/"</span><span class="fu">,</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="dt">"args"</span><span class="fu">:</span> <span class="fu">{</span><span class="dt">"text"</span><span class="fu">:</span> <span class="st">" &lt;- "</span><span class="fu">}</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span><span class="er">,</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="dt">"key"</span><span class="fu">:</span> <span class="st">"alt+-"</span><span class="fu">,</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="dt">"command"</span><span class="fu">:</span> <span class="st">"workbench.action.terminal.sendSequence"</span><span class="fu">,</span></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="dt">"when"</span><span class="fu">:</span> <span class="st">"terminalFocus"</span><span class="fu">,</span></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="dt">"args"</span><span class="fu">:</span> <span class="fu">{</span><span class="dt">"text"</span><span class="fu">:</span> <span class="st">" &lt;- "</span><span class="fu">}</span></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span><span class="er">,</span></span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="dt">"key"</span><span class="fu">:</span> <span class="st">"ctrl+shift+m"</span><span class="fu">,</span></span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="dt">"command"</span><span class="fu">:</span> <span class="st">"type"</span><span class="fu">,</span></span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="dt">"when"</span><span class="fu">:</span> <span class="st">"editorTextFocus &amp;&amp; editorLangId =~ /r|rmd|quarto/"</span><span class="fu">,</span></span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="dt">"args"</span><span class="fu">:</span> <span class="fu">{</span><span class="dt">"text"</span><span class="fu">:</span> <span class="st">" %&gt;% "</span><span class="fu">}</span></span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span><span class="er">,</span></span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a><span class="dt">"key"</span><span class="fu">:</span> <span class="st">"ctrl+shift+m"</span><span class="fu">,</span></span>
-<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a><span class="dt">"command"</span><span class="fu">:</span> <span class="st">"workbench.action.terminal.sendSequence"</span><span class="fu">,</span></span>
-<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a><span class="dt">"when"</span><span class="fu">:</span> <span class="st">"terminalFocus"</span><span class="fu">,</span></span>
-<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a><span class="dt">"args"</span><span class="fu">:</span> <span class="fu">{</span><span class="dt">"text"</span><span class="fu">:</span> <span class="st">" %&gt;% "</span><span class="fu">}</span></span>
-<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span><span class="er">,</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="dt">"key"</span><span class="fu">:</span> <span class="st">"alt+-"</span><span class="fu">,</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="dt">"command"</span><span class="fu">:</span> <span class="st">"type"</span><span class="fu">,</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="dt">"when"</span><span class="fu">:</span> <span class="st">"editorTextFocus &amp;&amp; editorLangId =~ /r|rmd|qmd/"</span><span class="fu">,</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="dt">"args"</span><span class="fu">:</span> <span class="fu">{</span><span class="dt">"text"</span><span class="fu">:</span> <span class="st">" &lt;- "</span><span class="fu">}</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span><span class="er">,</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="dt">"key"</span><span class="fu">:</span> <span class="st">"alt+-"</span><span class="fu">,</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="dt">"command"</span><span class="fu">:</span> <span class="st">"workbench.action.terminal.sendSequence"</span><span class="fu">,</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="dt">"when"</span><span class="fu">:</span> <span class="st">"terminalFocus"</span><span class="fu">,</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="dt">"args"</span><span class="fu">:</span> <span class="fu">{</span><span class="dt">"text"</span><span class="fu">:</span> <span class="st">" &lt;- "</span><span class="fu">}</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span><span class="er">,</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="dt">"key"</span><span class="fu">:</span> <span class="st">"ctrl+shift+m"</span><span class="fu">,</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="dt">"command"</span><span class="fu">:</span> <span class="st">"type"</span><span class="fu">,</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="dt">"when"</span><span class="fu">:</span> <span class="st">"editorTextFocus &amp;&amp; editorLangId =~ /r|rmd|quarto/"</span><span class="fu">,</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="dt">"args"</span><span class="fu">:</span> <span class="fu">{</span><span class="dt">"text"</span><span class="fu">:</span> <span class="st">" %&gt;% "</span><span class="fu">}</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span><span class="er">,</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a><span class="dt">"key"</span><span class="fu">:</span> <span class="st">"ctrl+shift+m"</span><span class="fu">,</span></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a><span class="dt">"command"</span><span class="fu">:</span> <span class="st">"workbench.action.terminal.sendSequence"</span><span class="fu">,</span></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a><span class="dt">"when"</span><span class="fu">:</span> <span class="st">"terminalFocus"</span><span class="fu">,</span></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a><span class="dt">"args"</span><span class="fu">:</span> <span class="fu">{</span><span class="dt">"text"</span><span class="fu">:</span> <span class="st">" %&gt;% "</span><span class="fu">}</span></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span><span class="er">,</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>

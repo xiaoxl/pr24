@@ -695,7 +695,7 @@
     "href": "contents/app/r.html#rstudio",
     "title": "Appendix E — R Setup",
     "section": "E.1 RStudio",
-    "text": "E.1 RStudio\nFor R, the almost definite choice of IDE is RStudio. You may download and install it from the homepage. The installation and beginning usage is straightforward. RStudio is using the default R console.\nAlthough the best R IDE is RStudio, there are still some people willing to try other options. In the rest part of this section I will briefly describe how to set up R environment using other IDES/platforms.",
+    "text": "E.1 RStudio\nFor R, the almost definite choice of IDE is RStudio. You may download and install it from the homepage. The installation and beginning usage is straightforward. RStudio is using the default R console. Note that you may need to install tidyverse packages for the purpose of data science. That is, in the R console, first run\n\ninstall.packages(\"tidyverse\")\n\nto intall the packages, and then run\n\nlibrary(tidyverse)\n\nto load it.\nAlthough the best R IDE is RStudio, there are still some people willing to try other options. In the rest part of this section I will briefly describe how to set up R environment using other IDES/platforms.",
     "crumbs": [
       "Appendices",
       "<span class='chapter-number'>E</span>  <span class='chapter-title'>R Setup</span>"
