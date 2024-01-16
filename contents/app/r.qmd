@@ -10,9 +10,23 @@ format:
 
 ## RStudio
 
-For R, the almost definite choice of IDE is RStudio. You may download and install it from [the homepage](https://posit.co/downloads/). The installation and beginning usage is straightforward. RStudio is using the default R console. 
+For R, the almost definite choice of IDE is RStudio. You may download and install it from [the homepage](https://posit.co/downloads/). The installation and beginning usage is straightforward. RStudio is using the default R console. Note that you may need to install `tidyverse` packages for the purpose of data science. That is, in the R console, first run
+
+```{r}
+#| eval: false
+install.packages("tidyverse")
+```
+to intall the packages, and then run 
+
+```{r}
+#| eval: false
+library(tidyverse)
+```
+to load it. 
+
 
 Although the best R IDE is RStudio, there are still some people willing to try other options. In the rest part of this section I will briefly describe how to set up R environment using other IDES/platforms. 
+
 
 ## `radian`
 `radian` is an alternative console for the R program with multiline editing and rich syntax highlight. One would consider `radian` as a `IPython` clone for R, though its design is more aligned to [Julia](https://julialang.org/).
